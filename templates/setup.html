@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Vendor — Invoice Processor</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <h1>Invoice Processor</h1>
+    <nav>
+      <a href="/" class="nav-link">Dashboard</a>
+      <a href="/setup" class="nav-link active">Add Vendor</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Load existing vendor -->
+  <section class="card" id="load-section">
+    <h2>Edit existing vendor <span class="hint">— or start fresh below</span></h2>
+    <div style="display:flex;gap:8px;align-items:center">
+      <select id="load-vendor-select" style="flex:1;padding:8px 10px;border:1px solid var(--gray-200);border-radius:var(--radius);font-size:14px">
+        <option value="">— Select a saved vendor to edit —</option>
+      </select>
+      <button id="load-vendor-btn" class="btn btn-outline">Load</button>
+    </div>
+  </section>
+
+  <!-- Step 1: Upload sample -->
+  <section class="card" id="step1">
+    <h2>Step 1 — Upload a sample invoice PDF</h2>
+    <p class="hint">This PDF will be used to test your extraction patterns. It will NOT be added to the Excel.</p>
+    <div id="sample-drop-zone" class="drop-zone">
+      <p>Drop sample PDF here</p>
+      <p class="hint">or <label for="sample-input" class="link-btn">browse</label></p>
+      <input type="file" id="sample-input" accept=".pdf" hidden>
+    </div>
+    <div id="sample-status" class="hidden"></div>
+  </section>
+
+  <!-- Step 2: Vendor info + extracted text -->
+  <section class="card hidden" id="step2">
+    <h2>Step 2 — Read the extracted PDF text</h2>
+    <p class="hint">Find the exact words that appear just before each value you want to extract. You will copy them in Step 3.</p>
+    <details class="text-viewer" id="text-viewer" open>
+      <summary>Extracted PDF text</summary>
+      <div id="page-tabs" class="page-tabs"></div>
+      <pre id="sample-text-display" class="pdf-text"></pre>
+    </details>
+
+    <h2 style="margin-top:24px">Vendor details</h2>
+    <div class="form-grid">
+      <label>Vendor display name
+        <input type="text" id="vendor-name" placeholder="e.g. El Corte Inglés">
+      </label>
+      <label>Detection keywords <span class="hint">(comma-separated, case-insensitive)</span>
+        <input type="text" id="vendor-keywords" placeholder="e.g. el corte ingles, elcorteingles.es">
+      </label>
+    </div>
+  </section>
+
+  <!-- Step 3: Field patterns -->
+  <section class="card hidden" id="step3">
+    <h2>Step 3 — Field patterns</h2>
+    <p class="hint">Use the extracted text from Step 2 — copy the exact words that appear just before each value.</p>
+
+    <div class="field-block" data-field="invoice_number">
+      <h3>Invoice Number</h3>
+      <div class="simple-field">
+        <label>Text in the PDF just before the invoice number:
+          <input type="text" class="label-input" placeholder="e.g.  Nº FACTURA">
+        </label>
+        <div class="simple-row">
+          <label>Type of value:
+            <select class="value-type">
+              <option value="code">Code / text &nbsp;(e.g. A-2024-001, ES60093)</option>
+              <option value="amount">Plain number &nbsp;(e.g. 12345)</option>
+            </select>
+          </label>
+          <button class="btn btn-sm test-btn">Test</button>
+        </div>
+        <label class="radio-label" style="margin-top:6px">
+          <input type="checkbox" class="next-line-check">
+          Value is on the line below the label <span class="hint">(for column headers)</span>
+        </label>
+      </div>
+      <div class="test-result hidden"></div>
+    </div>
+
+    <div class="field-block" data-field="date">
+      <h3>Invoice Date</h3>
+      <div class="simple-field">
+        <label>Text in the PDF just before the date:
+          <input type="text" class="label-input" placeholder="e.g.  FECHA EMISIÓN">
+        </label>
+        <div class="simple-row">
+          <label>Date format in this PDF:
+            <select class="value-type">
+              <option value="date_slash">30/abr./2026 &nbsp;or&nbsp; 30-ABR-2026 &nbsp;(slash or dash)</option>
+              <option value="date_space">30 abril 2026 &nbsp;or&nbsp; 30 de abril de 2026</option>
+              <option value="date_num">30/04/2026</option>
+            </select>
+          </label>
+          <button class="btn btn-sm test-btn">Test</button>
+        </div>
+        <label class="radio-label" style="margin-top:6px">
+          <input type="checkbox" class="next-line-check">
+          Value is on the line below the label <span class="hint">(for column headers)</span>
+        </label>
+      </div>
+      <div class="test-result hidden"></div>
+    </div>
+
+    <div class="field-block" data-field="vendor_name">
+      <h3>Vendor Name</h3>
+      <div class="simple-field">
+        <label>Fixed name — this exact text will be written to every row:
+          <input type="text" class="label-input" placeholder="e.g.  Inforconta">
+        </label>
+        <div class="simple-row">
+          <button class="btn btn-sm test-btn">Test</button>
+        </div>
+      </div>
+      <div class="test-result hidden"></div>
+    </div>
+
+    <div class="field-block" data-field="excl_vat">
+      <h3>Amount excl. VAT</h3>
+      <div class="simple-field">
+        <div class="auto-row">
+          <label class="radio-label"><input type="radio" name="excl_vat_src" value="auto" checked> Auto-detect from VAT table <span class="hint">(try this first)</span></label>
+          <label class="radio-label"><input type="radio" name="excl_vat_src" value="label"> Find by label in the PDF</label>
+        </div>
+        <div class="label-section hidden">
+          <label>Text in the PDF just before the amount:
+            <input type="text" class="label-input" placeholder="e.g.  BASE IMPONIBLE">
+          </label>
+        </div>
+        <button class="btn btn-sm test-btn" style="margin-top:8px">Test</button>
+      </div>
+      <div class="test-result hidden"></div>
+    </div>
+
+    <div class="field-block" data-field="vat_amount">
+      <h3>VAT Amount</h3>
+      <div class="simple-field">
+        <div class="auto-row">
+          <label class="radio-label"><input type="radio" name="vat_amount_src" value="auto" checked> Auto-detect from VAT table <span class="hint">(try this first)</span></label>
+          <label class="radio-label"><input type="radio" name="vat_amount_src" value="label"> Find by label in the PDF</label>
+        </div>
+        <div class="label-section hidden">
+          <label>Text in the PDF just before the VAT amount:
+            <input type="text" class="label-input" placeholder="e.g.  IMPORTE I.V.A.">
+          </label>
+        </div>
+        <button class="btn btn-sm test-btn" style="margin-top:8px">Test</button>
+      </div>
+      <div class="test-result hidden"></div>
+    </div>
+
+  </section>
+
+  <!-- Step 4: Save -->
+  <section class="card hidden" id="step4">
+    <h2>Step 4 — Save vendor config</h2>
+    <div id="config-preview" class="code-block"></div>
+    <div class="actions">
+      <button id="save-btn" class="btn btn-success">Save Vendor</button>
+    </div>
+    <div id="save-result" class="result-msg hidden"></div>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
