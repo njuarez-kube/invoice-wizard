@@ -1,0 +1,66 @@
+{
+  "name": "MONTALK",
+  "detect_keywords": [
+    "X9658648M"
+  ],
+  "currency": "EUR",
+  "fields": {
+    "vendor_name": {
+      "static": "MONTALK"
+    },
+    "invoice_number": {
+      "_label": "X9658648M",
+      "_fmt": "code",
+      "_next_line": true,
+      "_last_token": true,
+      "regex": "X9658648M[^\\n]*\\n(?:[^\\n]+[ \\t])?(\\S+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "date": {
+      "_label": "X9658648M",
+      "_fmt": "date_num",
+      "_next_line": true,
+      "_last_token": false,
+      "type": "spanish_dmy",
+      "regex": "X9658648M[^\\n]*\\n[^\\n]*?(\\d{1,2})[/\\-](\\d{2})[/\\-](\\d{4})",
+      "occurrence": 1
+    },
+    "excl_vat": {
+      "_label": "Base imponible",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "Base\\s+imponible[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_amount": {
+      "_label": "+IVA 21%",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "\\+IVA\\s+21%[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_inc": {
+      "_label": "Total Factura",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "Total\\s+Factura[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "retention": {
+      "_label": "-IRPF 15%",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "-IRPF\\s+15%[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    }
+  }
+}

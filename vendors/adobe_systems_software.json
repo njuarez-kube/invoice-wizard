@@ -1,0 +1,57 @@
+{
+  "name": "Adobe Systems Software",
+  "detect_keywords": [
+    "Adobe Systems Software"
+  ],
+  "currency": "EUR",
+  "fields": {
+    "vendor_name": {
+      "static": "Adobe Systems Software"
+    },
+    "invoice_number": {
+      "_label": "Número de factura",
+      "_fmt": "code",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "Número\\s+de\\s+factura\\s*(\\S+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "date": {
+      "_label": "Fecha de la factura",
+      "_fmt": "date_slash",
+      "_next_line": false,
+      "_last_token": false,
+      "type": "spanish_dmy",
+      "regex": "Fecha\\s+de\\s+la\\s+factura\\s*(\\d{1,2})[/\\-](\\w+)\\.?[/\\-](\\d{4})",
+      "occurrence": 1
+    },
+    "excl_vat": {
+      "_label": "IMPORTE NETO (EUR)",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "IMPORTE\\s+NETO\\s+\\(EUR\\)[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_amount": {
+      "_label": "IMPUESTOS (VER LOS TIPOS)",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "IMPUESTOS\\s+\\(VER\\s+LOS\\s+TIPOS\\)[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_inc": {
+      "_label": "TOTAL (EUR)",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "TOTAL\\s+\\(EUR\\)[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    }
+  }
+}

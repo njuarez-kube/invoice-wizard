@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Invoice Wizard — Installation Guide</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1f2937;
+    background: #f9fafb;
+    padding: 32px 16px;
+  }
+  .page { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .subtitle { color: #6b7280; margin-bottom: 36px; }
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  h3 { font-size: 15px; font-weight: 600; margin: 16px 0 6px; color: #374151; }
+  p { margin-bottom: 10px; }
+
+  /* Step blocks */
+  .step {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: #2563eb;
+    color: #fff;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 2px;
+  }
+  .step-body { flex: 1; }
+  .step-body strong { display: block; font-size: 16px; margin-bottom: 6px; }
+
+  /* Callouts */
+  .warning {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-left: 4px solid #f97316;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    color: #7c2d12;
+  }
+  .tip {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-left: 4px solid #22c55e;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    color: #14532d;
+  }
+  .info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-left: 4px solid #3b82f6;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    color: #1e3a5f;
+  }
+
+  /* Key / button visuals */
+  kbd {
+    display: inline-block;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-bottom: 3px solid #9ca3af;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+  }
+  .file {
+    display: inline-block;
+    background: #fef9c3;
+    border: 1px solid #fde68a;
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #713f12;
+  }
+  .click {
+    display: inline-block;
+    background: #e0e7ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #3730a3;
+  }
+
+  ul { padding-left: 20px; }
+  ul li { margin-bottom: 6px; }
+
+  hr { border: none; border-top: 1px solid #e5e7eb; margin: 32px 0; }
+
+  .section-daily {
+    background: #fff;
+    border: 2px solid #22c55e;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 12px;
+  }
+  .section-daily h3 { color: #15803d; font-size: 16px; }
+
+  footer { margin-top: 48px; color: #9ca3af; font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>The Invoice Wizard</h1>
+  <p class="subtitle">Installation and usage guide — follow these steps in order.</p>
+
+  <!-- ── PART 1: PYTHON ──────────────────────────────────────────────────── -->
+  <h2>Part 1 — Install Python <span style="font-weight:400;color:#6b7280;font-size:14px">(first time only)</span></h2>
+
+  <p>The app runs on Python. You only need to do this once, ever.</p>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Open your browser and go to this address:</strong>
+      <p><a href="https://www.python.org/downloads/" target="_blank" style="color:#2563eb;font-weight:600">https://www.python.org/downloads/</a></p>
+      <p>Click the big yellow <strong>Download Python</strong> button. A file will download.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>Run the installer</strong>
+      <p>Open the downloaded file (it looks like <span class="file">python-3.x.x-amd64.exe</span>).</p>
+      <div class="warning">
+        <strong>⚠ Very important:</strong> Before clicking anything, find the checkbox at the bottom of the installer window that says <strong>"Add Python to PATH"</strong> — make sure it is <strong>checked (ticked)</strong>. If you miss this step the app will not work.
+      </div>
+      <p>Then click <span class="click">Install Now</span> and wait for it to finish. Click <span class="click">Close</span> when done.</p>
+    </div>
+  </div>
+
+  <!-- ── PART 2: INSTALL APP ─────────────────────────────────────────────── -->
+  <h2>Part 2 — Install the app <span style="font-weight:400;color:#6b7280;font-size:14px">(first time only)</span></h2>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Extract the ZIP file</strong>
+      <p>Find the <span class="file">invoice-processor.zip</span> file you received.</p>
+      <p>Right-click on it → <span class="click">Extract All…</span> → choose a location (for example your Desktop) → click <span class="click">Extract</span>.</p>
+      <p>You will get a folder called <span class="file">invoice-processor</span>. Open it.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <strong>Double-click <span class="file">install.bat</span></strong>
+      <p>A black window will appear and show text scrolling by. This is normal — it is downloading the required components.</p>
+      <p>Wait until it says <em>"All requirements are installed. You are ready to go!"</em> then press any key to close the window.</p>
+      <div class="tip">✓ You only need to do this once. Next time, skip straight to Part 3.</div>
+    </div>
+  </div>
+
+  <!-- ── PART 3: RUN ─────────────────────────────────────────────────────── -->
+  <h2>Part 3 — Using the app every day</h2>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <strong>Create a Desktop shortcut <span style="font-weight:400;color:#6b7280">(optional, recommended)</span></strong>
+      <p>Double-click <span class="file">create-shortcut.bat</span> inside the app folder.</p>
+      <p>A shortcut called <strong>The Invoice Wizard</strong> will appear on your Desktop. From now on, just double-click that icon to start the app — no need to open the folder each time.</p>
+    </div>
+  </div>
+
+  <div class="section-daily">
+    <h3>✓ Every time you want to use the app:</h3>
+    <p style="margin-top:8px">Double-click the <strong>The Invoice Wizard</strong> icon on your Desktop.</p>
+    <p><em>(Or double-click <span class="file">start.bat</span> inside the app folder if you did not create the shortcut.)</em></p>
+    <p style="margin-top:8px">A black window will appear and stay open — <strong>do not close it</strong>. Your browser will open automatically with the app.</p>
+    <p>When you are done, <strong>close the black window</strong> to stop the app.</p>
+  </div>
+
+  <div class="tip" style="margin-top:16px">
+    <strong>✓ Not sure if everything is installed correctly?</strong><br>
+    Double-click <span class="file">check.bat</span> at any time. It will show a green <strong>[OK]</strong> or red <strong>[MISSING]</strong> for each requirement, and tell you exactly what to do.
+  </div>
+
+  <div class="info" style="margin-top:12px">
+    <strong>ℹ If the browser does not open automatically:</strong><br>
+    Open your browser manually and go to: <strong>http://localhost:8080</strong>
+  </div>
+
+  <!-- ── PART 4: DRIVE SYNC ──────────────────────────────────────────────── -->
+  <h2>Part 4 — Google Drive vendor sync</h2>
+
+  <p>The app connects to a shared Google Drive folder where all vendor invoice templates are stored. From the <strong>Setup</strong> page you can keep your local copy in sync.</p>
+
+  <div class="step">
+    <div class="step-num">↓</div>
+    <div class="step-body">
+      <strong>Update — download the latest templates</strong>
+      <p>Click <span class="click">Update</span> to download any new or changed vendor templates from Drive. Do this whenever you start a new session or a colleague tells you they have added a new vendor.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">↑</div>
+    <div class="step-body">
+      <strong>Add to Drive — share a new vendor you created</strong>
+      <p>If you set up a new vendor on the Setup page, click <span class="click">Add to Drive</span> to upload it so everyone else can download it with their next Update.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    ✓ <strong>Typical workflow:</strong> Click <span class="click">Update</span> at the start of your day → process invoices → if you created a new vendor, click <span class="click">Add to Drive</span> before closing the app.
+  </div>
+
+  <div class="info">
+    <strong>ℹ</strong> The green <strong>Connected</strong> chip next to "Google Drive Sync" confirms the app has access. If it shows <strong>Disconnected</strong>, contact your administrator.
+  </div>
+
+  <hr>
+
+  <!-- ── TROUBLESHOOTING ─────────────────────────────────────────────────── -->
+  <h2>Troubleshooting</h2>
+
+  <h3>How to open Command Prompt (CMD) manually</h3>
+  <p>Sometimes support staff may ask you to open a terminal window. Here is how:</p>
+
+  <p><strong>Easiest way — from the app folder:</strong></p>
+  <ul>
+    <li>Open the <span class="file">invoice-processor</span> folder in File Explorer</li>
+    <li>Click on the address bar at the top (it shows the folder path)</li>
+    <li>Type <kbd>cmd</kbd> and press <kbd>Enter</kbd></li>
+    <li>A black window opens, already inside the correct folder</li>
+  </ul>
+
+  <p style="margin-top:14px"><strong>Alternative — from the Start menu:</strong></p>
+  <ul>
+    <li>Press <kbd>⊞ Win</kbd> + <kbd>R</kbd></li>
+    <li>Type <kbd>cmd</kbd> and press <kbd>Enter</kbd></li>
+  </ul>
+
+  <p style="margin-top:14px"><strong>Alternative — from the taskbar search:</strong></p>
+  <ul>
+    <li>Click the search bar next to the Start button</li>
+    <li>Type <strong>cmd</strong></li>
+    <li>Click <span class="click">Command Prompt</span></li>
+  </ul>
+
+  <hr>
+
+  <h3>Common problems</h3>
+
+  <p><strong>The black window closes immediately when I double-click install.bat or start.bat</strong><br>
+  Python is probably not installed correctly. Repeat Part 1 and make sure the "Add Python to PATH" checkbox is ticked.</p>
+
+  <p><strong>The browser says "This site can't be reached"</strong><br>
+  The black window from start.bat was closed. Double-click start.bat again and keep the window open.</p>
+
+  <p><strong>Port 8080 is already in use</strong><br>
+  Another program is using that port. Open <span class="file">config.ini</span> with Notepad, change <code>port = 8080</code> to <code>port = 8081</code>, save, and start again. Then go to <strong>http://localhost:8081</strong>.</p>
+
+  <p><strong>install.bat says "pip is not recognized"</strong><br>
+  Python was installed without PATH. Uninstall Python (via Settings → Apps), then reinstall it following Part 1 carefully.</p>
+
+  <footer>The Invoice Wizard v1.0 &nbsp;·&nbsp; Keep this file with the app folder</footer>
+</div>
+</body>
+</html>

@@ -3,21 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Vendor — Invoice Processor</title>
+<title>Add Vendor — The Invoice Wizard 🧙‍♀️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="/static/icon.png" type="image/png">
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <header>
   <div class="header-inner">
-    <h1>Invoice Processor</h1>
+    <h1>🧙‍♀️ The Invoice Wizard</h1>
     <nav>
-      <a href="/" class="nav-link">Dashboard</a>
-      <a href="/setup" class="nav-link active">Add Vendor</a>
+      <a href="/" class="nav-link" data-label="Dashboard">Dashboard</a>
+      <a href="/setup" class="nav-link active" data-label="Add Vendor">Add Vendor</a>
     </nav>
+    <button id="close-app-btn" class="nav-link nav-link-danger" data-label="Close Session" style="margin-left:auto;cursor:pointer">Close Session</button>
   </div>
 </header>
 
 <main>
+  <!-- Google Drive sync -->
+  <section class="card" id="drive-sync-card">
+    <h2>Google Drive Sync <span id="drive-status-chip" class="drive-chip"></span></h2>
+    <p class="hint">Update to download latest vendors invoice templates. Add to Drive to share yours!</p>
+    <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+      <button id="drive-pull-btn" class="btn btn-outline" disabled>Update</button>
+      <button id="drive-push-btn" class="btn btn-outline" disabled>Add to Drive</button>
+      <span id="drive-result" class="hint" style="margin-left:4px"></span>
+    </div>
+  </section>
+
   <!-- Load existing vendor -->
   <section class="card" id="load-section">
     <h2>Edit existing vendor <span class="hint">— or start fresh below</span></h2>
@@ -48,6 +63,7 @@
     <details class="text-viewer" id="text-viewer" open>
       <summary>Extracted PDF text</summary>
       <div id="page-tabs" class="page-tabs"></div>
+      <div id="pick-banner"></div>
       <pre id="sample-text-display" class="pdf-text"></pre>
     </details>
 
@@ -56,8 +72,18 @@
       <label>Vendor display name
         <input type="text" id="vendor-name" placeholder="e.g. El Corte Inglés">
       </label>
-      <label>Detection keywords <span class="hint">(comma-separated, case-insensitive)</span>
+      <label>Currency
+        <select id="vendor-currency">
+          <option value="EUR" selected>EUR — Euro</option>
+          <option value="USD">USD — US Dollar</option>
+          <option value="GBP">GBP — British Pound</option>
+          <option value="CHF">CHF — Swiss Franc</option>
+        </select>
+      </label>
+      <label><span>Detection keywords <span style="color:#dc2626">*</span></span>
+        <span class="hint">(comma-separated, case-insensitive)</span>
         <input type="text" id="vendor-keywords" placeholder="e.g. el corte ingles, elcorteingles.es">
+        <span id="kws-error" class="hint" style="color:#dc2626;display:none">Enter at least one keyword.</span>
       </label>
     </div>
   </section>
@@ -80,12 +106,22 @@
               <option value="amount">Plain number &nbsp;(e.g. 12345)</option>
             </select>
           </label>
-          <button class="btn btn-sm test-btn">Test</button>
         </div>
         <label class="radio-label" style="margin-top:6px">
           <input type="checkbox" class="next-line-check">
           Value is on the line below the label <span class="hint">(for column headers)</span>
         </label>
+        <label class="radio-label last-token-row" style="margin-top:4px">
+          <input type="checkbox" class="last-token-check">
+          It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+        </label>
+        <label class="radio-label" style="margin-top:6px">
+          Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+        </label>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-sm test-btn">Test</button>
+          <button class="btn btn-sm btn-outline pick-btn">Pick ↗</button>
+        </div>
       </div>
       <div class="test-result hidden"></div>
     </div>
@@ -102,26 +138,24 @@
               <option value="date_slash">30/abr./2026 &nbsp;or&nbsp; 30-ABR-2026 &nbsp;(slash or dash)</option>
               <option value="date_space">30 abril 2026 &nbsp;or&nbsp; 30 de abril de 2026</option>
               <option value="date_num">30/04/2026</option>
+              <option value="date_mdy">may 01, 2026 &nbsp;(month name first)</option>
             </select>
           </label>
-          <button class="btn btn-sm test-btn">Test</button>
         </div>
         <label class="radio-label" style="margin-top:6px">
           <input type="checkbox" class="next-line-check">
           Value is on the line below the label <span class="hint">(for column headers)</span>
         </label>
-      </div>
-      <div class="test-result hidden"></div>
-    </div>
-
-    <div class="field-block" data-field="vendor_name">
-      <h3>Vendor Name</h3>
-      <div class="simple-field">
-        <label>Fixed name — this exact text will be written to every row:
-          <input type="text" class="label-input" placeholder="e.g.  Inforconta">
+        <label class="radio-label last-token-row" style="margin-top:4px">
+          <input type="checkbox" class="last-token-check">
+          It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
         </label>
-        <div class="simple-row">
+        <label class="radio-label" style="margin-top:6px">
+          Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+        </label>
+        <div style="display:flex;gap:8px;margin-top:8px">
           <button class="btn btn-sm test-btn">Test</button>
+          <button class="btn btn-sm btn-outline pick-btn">Pick ↗</button>
         </div>
       </div>
       <div class="test-result hidden"></div>
@@ -130,16 +164,26 @@
     <div class="field-block" data-field="excl_vat">
       <h3>Amount excl. VAT</h3>
       <div class="simple-field">
-        <div class="auto-row">
-          <label class="radio-label"><input type="radio" name="excl_vat_src" value="auto" checked> Auto-detect from VAT table <span class="hint">(try this first)</span></label>
-          <label class="radio-label"><input type="radio" name="excl_vat_src" value="label"> Find by label in the PDF</label>
-        </div>
-        <div class="label-section hidden">
+        <div class="label-section">
           <label>Text in the PDF just before the amount:
             <input type="text" class="label-input" placeholder="e.g.  BASE IMPONIBLE">
           </label>
+          <label class="radio-label" style="margin-top:6px">
+            <input type="checkbox" class="next-line-check">
+            Value is on the line below the label <span class="hint">(for column headers)</span>
+          </label>
+          <label class="radio-label last-token-row" style="margin-top:4px">
+            <input type="checkbox" class="last-token-check">
+            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+          </label>
+          <label class="radio-label" style="margin-top:6px">
+            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+          </label>
         </div>
-        <button class="btn btn-sm test-btn" style="margin-top:8px">Test</button>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-sm test-btn">Test</button>
+          <button class="btn btn-sm btn-outline pick-btn">Pick ↗</button>
+        </div>
       </div>
       <div class="test-result hidden"></div>
     </div>
@@ -147,16 +191,112 @@
     <div class="field-block" data-field="vat_amount">
       <h3>VAT Amount</h3>
       <div class="simple-field">
-        <div class="auto-row">
-          <label class="radio-label"><input type="radio" name="vat_amount_src" value="auto" checked> Auto-detect from VAT table <span class="hint">(try this first)</span></label>
-          <label class="radio-label"><input type="radio" name="vat_amount_src" value="label"> Find by label in the PDF</label>
-        </div>
-        <div class="label-section hidden">
+        <div class="label-section">
           <label>Text in the PDF just before the VAT amount:
             <input type="text" class="label-input" placeholder="e.g.  IMPORTE I.V.A.">
           </label>
+          <label class="radio-label" style="margin-top:6px">
+            <input type="checkbox" class="next-line-check">
+            Value is on the line below the label <span class="hint">(for column headers)</span>
+          </label>
+          <label class="radio-label last-token-row" style="margin-top:4px">
+            <input type="checkbox" class="last-token-check">
+            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+          </label>
+          <label class="radio-label" style="margin-top:6px">
+            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+          </label>
         </div>
-        <button class="btn btn-sm test-btn" style="margin-top:8px">Test</button>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-sm test-btn">Test</button>
+          <button class="btn btn-sm btn-outline pick-btn">Pick ↗</button>
+        </div>
+      </div>
+      <div class="test-result hidden"></div>
+    </div>
+
+    <div class="field-block" data-field="vat_inc">
+      <h3>Total Amount (VAT inclusive) <span class="hint">(optional — use when invoice only shows total, not the breakdown)</span></h3>
+      <div class="simple-field">
+        <label>Text in the PDF just before the total:
+          <input type="text" class="label-input" placeholder="e.g.  TOTAL FACTURA">
+        </label>
+        <div class="simple-row">
+          <button class="btn btn-sm test-btn">Test</button>
+        </div>
+        <label class="radio-label" style="margin-top:6px">
+          <input type="checkbox" class="next-line-check">
+          Value is on the line below the label <span class="hint">(for column headers)</span>
+        </label>
+        <label class="radio-label last-token-row" style="margin-top:4px">
+          <input type="checkbox" class="last-token-check">
+          It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+        </label>
+        <label class="radio-label" style="margin-top:6px">
+          Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+        </label>
+      </div>
+      <div class="test-result hidden"></div>
+    </div>
+
+    <div class="field-block" data-field="retention">
+      <h3>Retention IRPF <span class="hint">(optional — value always stored positive; reduces the € VAT inc total)</span></h3>
+      <div class="simple-field">
+        <div class="auto-row">
+          <label class="radio-label"><input type="radio" name="retention_src" value="skip" checked> Skip — no IRPF retention for this vendor</label>
+          <label class="radio-label"><input type="radio" name="retention_src" value="label"> Find by label in the PDF</label>
+        </div>
+        <div class="label-section hidden">
+          <label>Text in the PDF just before the retention amount:
+            <input type="text" class="label-input" placeholder="e.g.  RETENCIÓN I.R.P.F.">
+          </label>
+          <label class="radio-label" style="margin-top:6px">
+            <input type="checkbox" class="next-line-check">
+            Value is on the line below the label <span class="hint">(for column headers)</span>
+          </label>
+          <label class="radio-label last-token-row" style="margin-top:4px">
+            <input type="checkbox" class="last-token-check">
+            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+          </label>
+          <label class="radio-label" style="margin-top:6px">
+            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+          </label>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-sm test-btn">Test</button>
+          <button class="btn btn-sm btn-outline pick-btn">Pick ↗</button>
+        </div>
+      </div>
+      <div class="test-result hidden"></div>
+    </div>
+
+    <div class="field-block" data-field="comments">
+      <h3>Comments <span class="hint">(optional)</span></h3>
+      <div class="simple-field">
+        <div class="auto-row">
+          <label class="radio-label"><input type="radio" name="comments_src" value="skip" checked> Skip — no comments for this vendor</label>
+          <label class="radio-label"><input type="radio" name="comments_src" value="label"> Find by label in the PDF</label>
+        </div>
+        <div class="label-section hidden">
+          <label>Text in the PDF just before the comment:
+            <input type="text" class="label-input" placeholder="e.g.  CONCEPTO">
+          </label>
+          <label class="radio-label" style="margin-top:6px">
+            <input type="checkbox" class="next-line-check">
+            Value is on the line below the label <span class="hint">(for column headers)</span>
+          </label>
+          <label class="radio-label last-token-row" style="margin-top:4px">
+            <input type="checkbox" class="last-token-check">
+            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+          </label>
+          <label class="radio-label" style="margin-top:6px">
+            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+          </label>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-sm test-btn">Test</button>
+          <button class="btn btn-sm btn-outline pick-btn">Pick ↗</button>
+        </div>
       </div>
       <div class="test-result hidden"></div>
     </div>
@@ -174,6 +314,10 @@
   </section>
 </main>
 
+<div id="server-stopped-overlay" style="display:none">
+  <h2>Session closed</h2>
+  <p>The Invoice Wizard has shut down. You can close this tab.</p>
+</div>
 <script src="/static/app.js"></script>
 </body>
 </html>

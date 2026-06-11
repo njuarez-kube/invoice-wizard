@@ -1,0 +1,48 @@
+{
+  "name": "PAYFLOW EUROPE SLU",
+  "detect_keywords": [
+    "PAYFLOW EUROPE SLU"
+  ],
+  "currency": "EUR",
+  "fields": {
+    "vendor_name": {
+      "static": "PAYFLOW EUROPE SLU"
+    },
+    "invoice_number": {
+      "_label": "FACTURA",
+      "_fmt": "code",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "FACTURA\\s*(\\S+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "date": {
+      "_label": "Fecha:",
+      "_fmt": "date_num",
+      "_next_line": false,
+      "_last_token": false,
+      "type": "spanish_dmy",
+      "regex": "Fecha:\\s*(\\d{1,2})[/\\-](\\d{2})[/\\-](\\d{4})",
+      "occurrence": 1
+    },
+    "excl_vat": {
+      "_label": "BASE IMPONIBLE",
+      "_fmt": "",
+      "_next_line": true,
+      "_last_token": false,
+      "regex": "BASE\\s+IMPONIBLE[^\\n]*\\n[^\\n]*?([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_amount": {
+      "_label": "IVA 21%",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "IVA\\s+21%[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    }
+  }
+}

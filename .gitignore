@@ -13,6 +13,15 @@ done/
 server_out.txt
 server_err.txt
 
+# Google Drive credentials — never commit, distribute in ZIP
+nicolas_gdrive_api_credentials.json
+gdrive_service_account.json
+token.json
+
+# Build artifacts
+The_Invoice_Wizard.zip
+api_gdrive.ipynb
+
 # OS
 .DS_Store
 Thumbs.db

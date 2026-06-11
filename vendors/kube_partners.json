@@ -1,0 +1,51 @@
+{
+  "name": "KUBE PARTNERS",
+  "detect_keywords": [
+    "Kube Partners S.L."
+  ],
+  "currency": "EUR",
+  "fields": {
+    "vendor_name": {
+      "static": "KUBE PARTNERS"
+    },
+    "invoice_number": {
+      "_label": "INVOICE / FACTURA",
+      "_fmt": "code",
+      "_next_line": true,
+      "_last_token": true,
+      "regex": "INVOICE\\s+/\\s+FACTURA[^\\n]*\\n(?:[^\\n]+[ \\t])?(\\S+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "date": {
+      "_label": "Date",
+      "_fmt": "date_num",
+      "_next_line": true,
+      "_last_token": false,
+      "type": "spanish_dmy",
+      "regex": "Date[^\\n]*\\n[^\\n]*?(\\d{1,2})[/\\-](\\d{2})[/\\-](\\d{4})",
+      "occurrence": 1
+    },
+    "excl_vat": {
+      "_label": "Total (exc.VAT/IVA)",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "Total\\s+\\(exc\\.VAT/IVA\\)[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_amount": {
+      "static": 0
+    },
+    "vat_inc": {
+      "_label": "Total (inc.VAT/IVA)",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "Total\\s+\\(inc\\.VAT/IVA\\)[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    }
+  }
+}

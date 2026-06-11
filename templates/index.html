@@ -3,21 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invoice Processor</title>
+<title>The Invoice Wizard 🧙‍♀️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="/static/icon.png" type="image/png">
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <header>
   <div class="header-inner">
-    <h1>Invoice Processor</h1>
+    <h1>🧙‍♀️ The Invoice Wizard</h1>
     <nav>
-      <a href="/" class="nav-link active">Dashboard</a>
-      <a href="/setup" class="nav-link">Add Vendor</a>
+      <a href="/" class="nav-link active" data-label="Dashboard">Dashboard</a>
+      <a href="/setup" class="nav-link" data-label="Add Vendor">Add Vendor</a>
     </nav>
+    <button id="close-app-btn" class="nav-link nav-link-danger" data-label="Close Session" style="margin-left:auto;cursor:pointer">Close Session</button>
   </div>
 </header>
 
 <main>
+  <!-- Update banner (shown by JS when a new version is available) -->
+  <div id="update-banner" style="display:none;background:#fefce8;border:1px solid #fde047;border-radius:10px;padding:12px 16px;margin-bottom:16px;display:none;align-items:center;gap:12px">
+    <span style="font-size:18px">⬆</span>
+    <span style="flex:1">Nueva versión <strong id="update-version"></strong> disponible — ejecuta <code>update.bat</code> para actualizar.</span>
+    <button onclick="this.parentElement.style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;line-height:1;color:#78716c">✕</button>
+  </div>
+
   <!-- Upload zone -->
   <section class="card" id="upload-section">
     <h2>Upload Invoices</h2>
@@ -51,7 +62,9 @@
             <th>€ VAT inc</th>
             <th>VAT Return.</th>
             <th>€ excl</th>
+            <th>Retención</th>
             <th>To/From</th>
+            <th>Comments</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -62,6 +75,10 @@
   </section>
 </main>
 
+<div id="server-stopped-overlay" style="display:none">
+  <h2>Session closed</h2>
+  <p>The Invoice Wizard has shut down. You can close this tab.</p>
+</div>
 <script src="/static/app.js"></script>
 </body>
 </html>

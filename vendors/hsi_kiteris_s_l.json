@@ -1,0 +1,57 @@
+{
+  "name": "HSI KITERIS, S.L.",
+  "detect_keywords": [
+    "HSI KITERIS"
+  ],
+  "currency": "EUR",
+  "fields": {
+    "vendor_name": {
+      "static": "HSI KITERIS, S.L."
+    },
+    "invoice_number": {
+      "_label": "Número: IN",
+      "_fmt": "amount",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "Número:\\s+IN[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "date": {
+      "_label": "Fecha:",
+      "_fmt": "date_num",
+      "_next_line": false,
+      "_last_token": false,
+      "type": "spanish_dmy",
+      "regex": "Fecha:\\s*(\\d{1,2})[/\\-](\\d{2})[/\\-](\\d{4})",
+      "occurrence": 1
+    },
+    "excl_vat": {
+      "_label": "SUB TOTAL",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "SUB\\s+TOTAL[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_amount": {
+      "_label": "TOTAL IVA",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "TOTAL\\s+IVA[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_inc": {
+      "_label": "PAGO TOTAL (EUR)",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "regex": "PAGO\\s+TOTAL\\s+\\(EUR\\)[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    }
+  }
+}
