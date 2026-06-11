@@ -64,17 +64,19 @@ def get_or_create_workbook(output_path: Path, template_path: Path) -> openpyxl.W
     return wb
 
 
-def load_existing_invoice_numbers(output_path: Path) -> set[str]:
+def load_existing_invoice_numbers(output_path: Path) -> set[tuple[str, str]]:
+    """Return a set of (invoice_number, vendor_name) pairs already in the workbook."""
     if not output_path.exists():
         return set()
     try:
         wb = openpyxl.load_workbook(output_path, read_only=True, data_only=True)
         ws = wb.active
-        seen: set[str] = set()
+        seen: set[tuple[str, str]] = set()
         for row in ws.iter_rows(min_row=2, values_only=True):
-            val = row[COL_INVOICE_NUM - 1]
-            if val is not None:
-                seen.add(str(val).strip())
+            num    = row[COL_INVOICE_NUM - 1]
+            vendor = row[COL_VENDOR - 1]
+            if num is not None:
+                seen.add((str(num).strip(), str(vendor).strip() if vendor else ''))
         wb.close()
         return seen
     except Exception as exc:
@@ -118,7 +120,7 @@ def append_rows(
     output_path: Path,
     template_path: Path,
     invoices: list[InvoiceData],
-    seen: set[str],
+    seen: set[tuple[str, str]],
 ) -> dict:
     """
     Append invoice rows to the workbook. Returns a summary dict.
@@ -132,9 +134,11 @@ def append_rows(
     errors = 0
 
     for inv in invoices:
-        num = inv.invoice_number or ''
-        if num and num in seen:
-            logging.warning("Duplicate invoice skipped: %s", num)
+        num    = inv.invoice_number or ''
+        vendor = inv.vendor_name or ''
+        key    = (num, vendor)
+        if num and key in seen:
+            logging.warning("Duplicate invoice skipped: %s (%s)", num, vendor)
             skipped_duplicates += 1
             continue
 
@@ -146,7 +150,7 @@ def append_rows(
         row = _find_next_empty_row(ws)
         _write_row(ws, row, inv)
         if num:
-            seen.add(num)
+            seen.add(key)
         written += 1
 
     wb.save(output_path)

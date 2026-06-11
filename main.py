@@ -147,7 +147,7 @@ async def extract(files: list[UploadFile] = File(...)):
             tmp_path.unlink(missing_ok=True)
 
         for inv in invoices:
-            is_dup = bool(inv.invoice_number and inv.invoice_number in seen)
+            is_dup = bool(inv.invoice_number and (inv.invoice_number, inv.vendor_name or '') in seen)
             vat_inc_raw = inv.vat_inc if inv.vat_inc is not None else round((inv.excl_vat or 0) + (inv.vat_amount or 0), 2)
             if inv.retention is not None and inv.excl_vat is not None and inv.vat_amount is not None:
                 vat_inc_display = round(inv.excl_vat + inv.vat_amount - inv.retention, 2)

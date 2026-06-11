@@ -95,9 +95,17 @@ def _parse_number(s) -> float | None:
     if not s:
         return None
     try:
-        if ',' in s:
+        comma = s.rfind(',')
+        dot   = s.rfind('.')
+        if comma > dot:
+            # European: 1.569,26 or 329,54 — comma is decimal
             return float(s.replace('.', '').replace(',', '.'))
-        return float(s)
+        elif dot > comma:
+            # UK/US: 1,569.26 or 329.54 — dot is decimal
+            return float(s.replace(',', ''))
+        else:
+            # No separator at all
+            return float(s)
     except ValueError:
         return None
 
