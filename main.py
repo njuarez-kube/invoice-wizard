@@ -61,6 +61,12 @@ _LOCAL_VERSION = (BASE_DIR / 'version.txt').read_text(encoding='utf-8').strip() 
 _GITHUB_REPO   = _cfg.get('update', 'github_repo', fallback='').strip()
 _update_cache: dict = {}
 
+def _version_tuple(v: str):
+    try:
+        return tuple(int(x) for x in v.split('.'))
+    except ValueError:
+        return (0,)
+
 def _fetch_latest_version():
     if not _GITHUB_REPO:
         return
@@ -69,7 +75,7 @@ def _fetch_latest_version():
         with urllib.request.urlopen(url, timeout=5) as r:
             latest = r.read().decode().strip()
         _update_cache['latest']    = latest
-        _update_cache['available'] = (latest != _LOCAL_VERSION)
+        _update_cache['available'] = _version_tuple(latest) > _version_tuple(_LOCAL_VERSION)
     except Exception:
         pass
 

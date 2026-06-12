@@ -17,10 +17,15 @@ const IS_SETUP = document.getElementById('step1') !== null;
 if (!IS_SETUP) {
   fetch('/api/version').then(r => r.json()).then(v => {
     if (!v.available) return;
+    if (localStorage.getItem('update_dismissed') === v.latest) return;
     const banner = document.getElementById('update-banner');
     if (!banner) return;
     document.getElementById('update-version').textContent = 'v' + v.latest;
     banner.style.display = 'flex';
+    document.getElementById('update-dismiss-btn').addEventListener('click', () => {
+      localStorage.setItem('update_dismissed', v.latest);
+      banner.style.display = 'none';
+    });
   }).catch(() => {});
 }
 
