@@ -74,6 +74,7 @@ Write-Host '  Installing...'
 $tmpDir = Join-Path $env:TEMP 'invoice_wizard_extracted'
 if (Test-Path $tmpDir) { Remove-Item $tmpDir -Recurse -Force }
 Expand-Archive $zipPath $tmpDir -Force
+$tmpDir = (Get-Item $tmpDir).FullName
 
 # ── Copy new files, preserving user data ─────────────────────────────────────
 # These are never overwritten (user-specific data)
