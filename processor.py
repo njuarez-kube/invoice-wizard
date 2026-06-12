@@ -61,7 +61,8 @@ def _clean_text(text: str) -> str:
     text = re.sub(r'(?<=\S)—(?=\S)', '', text)
     # strip spaces inserted within decimal numbers (two-column interleave artifact)
     # e.g. "5 60,00" → "560,00" ;  "1 17,60" → "117,60"
-    text = re.sub(r'(\d) (\d+[,\.]\d)', r'\1\2', text)
+    # lookbehinds prevent joining two separate decimals (e.g. "319,56 13,24" must stay as-is)
+    text = re.sub(r'(?<![,\.]\d)(?<![,\.])(\d) (\d+[,\.]\d)', r'\1\2', text)
     # strip space inserted before decimal separator
     # e.g. "3 .828,52" → "3.828,52" ;  "18 .231,06" → "18.231,06"
     text = re.sub(r'(\d) ([.,])(\d)', r'\1\2\3', text)

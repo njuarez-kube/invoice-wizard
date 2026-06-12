@@ -382,8 +382,13 @@ if (IS_SETUP) {
   function escLabel(label) {
     return label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/ +/g, '\\s+');
   }
-  function buildRegex(label, type, nextLine, lastToken) {
+  function buildRegex(label, type, nextLine, lastToken, tokenPos = 1) {
     const e = escLabel(label);
+    if (tokenPos > 1) {
+      const skip = `(?:[ \\t]+\\S+){${tokenPos - 1}}[ \\t]+`;
+      const pat = type === 'amount' ? '([\\d.,]+)' : '(\\S+)';
+      return e + (nextLine ? `[^\\n]*\\n${skip}` : skip) + pat;
+    }
     if (nextLine) {
       if (lastToken) {
         if (type === 'amount') return e + '[^\\n]*\\n(?:[^\\n]+[ \\t])?([\\d.,]+)';
@@ -400,11 +405,17 @@ if (IS_SETUP) {
     if (type === 'amount') return e + '[^\\d\\n]+([\\d.,]+)';
     return e + '\\s*(\\S+)';
   }
-  function buildDateRegex(label, fmt, nextLine, lastToken) {
+  function buildDateRegex(label, fmt, nextLine, lastToken, tokenPos = 1) {
     const e = escLabel(label);
-    const sep = nextLine
-      ? (lastToken ? '[^\\n]*\\n[^\\n]*[ \\t]' : '[^\\n]*\\n[^\\n]*?')
-      : (lastToken ? '[^\\n]*[ \\t]' : '\\s*');
+    let sep;
+    if (tokenPos > 1) {
+      const skip = `(?:[ \\t]+\\S+){${tokenPos - 1}}[ \\t]+`;
+      sep = nextLine ? `[^\\n]*\\n${skip}` : skip;
+    } else {
+      sep = nextLine
+        ? (lastToken ? '[^\\n]*\\n[^\\n]*[ \\t]' : '[^\\n]*\\n[^\\n]*?')
+        : (lastToken ? '[^\\n]*[ \\t]' : '\\s*');
+    }
     if (fmt === 'date_slash') return e + sep + '(\\d{1,2})[/\\-](\\w+)\\.?[/\\-](\\d{4})';
     if (fmt === 'date_num')   return e + sep + '(\\d{1,2})[/\\-](\\d{2})[/\\-](\\d{4})';
     if (fmt === 'date_mdy')   return e + sep + '(\\w+)\\s+(\\d{1,2}),?\\s+(\\d{4})';
@@ -422,34 +433,36 @@ if (IS_SETUP) {
     const lastToken      = lastTokenCheck?.checked || false;
     const occInput       = block.querySelector('.occurrence-input');
     const occurrence     = Math.max(1, parseInt(occInput?.value) || 1);
+    const tokenPosInput  = block.querySelector('.token-pos-input');
+    const tokenPos       = Math.max(1, parseInt(tokenPosInput?.value) || 1);
 
     if (fname === 'vendor_name') return { static: label };
 
-    const meta = label ? { _label: label, _fmt: fmt, _next_line: nextLine, _last_token: lastToken } : {};
+    const meta = label ? { _label: label, _fmt: fmt, _next_line: nextLine, _last_token: lastToken, _token_pos: tokenPos } : {};
 
     if (fname === 'excl_vat') {
-      return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken), group: 1, occurrence };
+      return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken, tokenPos), group: 1, occurrence };
     }
 
     if (fname === 'vat_amount') {
       if (!label) return { static: 0 };
-      return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken), group: 1, occurrence };
+      return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken, tokenPos), group: 1, occurrence };
     }
 
     if (fname === 'date') {
       const type = fmt === 'date_mdy' ? 'english_mdy' : 'spanish_dmy';
-      return { ...meta, type, regex: buildDateRegex(label, fmt, nextLine, lastToken), occurrence };
+      return { ...meta, type, regex: buildDateRegex(label, fmt, nextLine, lastToken, tokenPos), occurrence };
     }
 
     if (fname === 'vat_inc') {
       if (!label) return { skip: true };
-      return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken), group: 1, occurrence };
+      return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken, tokenPos), group: 1, occurrence };
     }
 
     if (fname === 'retention') {
       const radio = block.querySelector('input[type=radio]:checked');
       if (!radio || radio.value === 'skip') return { skip: true };
-      return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken), group: 1, occurrence };
+      return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken, tokenPos), group: 1, occurrence };
     }
 
     if (fname === 'comments') {
@@ -461,7 +474,7 @@ if (IS_SETUP) {
     }
 
     // invoice_number
-    return { ...meta, regex: buildRegex(label, fmt, nextLine, lastToken), group: 1, occurrence };
+    return { ...meta, regex: buildRegex(label, fmt, nextLine, lastToken, tokenPos), group: 1, occurrence };
   }
 
   // ── Test buttons ─────────────────────────────────────────────────────────────
@@ -670,6 +683,7 @@ if (IS_SETUP) {
       const lastTokenCheck = block.querySelector('.last-token-check');
       const lastTokenRow   = block.querySelector('.last-token-row');
       const occInput       = block.querySelector('.occurrence-input');
+      const tokenPosInput  = block.querySelector('.token-pos-input');
 
       if (labelInput     && fcfg._label !== undefined) labelInput.value = fcfg._label;
       if (valueType      && fcfg._fmt)                 valueType.value  = fcfg._fmt;
@@ -679,6 +693,7 @@ if (IS_SETUP) {
       }
       if (lastTokenCheck) lastTokenCheck.checked = !!fcfg._last_token;
       if (occInput && fcfg.occurrence) occInput.value = fcfg.occurrence;
+      if (tokenPosInput && fcfg._token_pos) tokenPosInput.value = fcfg._token_pos;
 
       if (fname === 'retention' || fname === 'comments') {
         const isSkip     = !!(fcfg.skip || !fcfg.regex);

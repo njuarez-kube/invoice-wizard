@@ -107,17 +107,22 @@
             </select>
           </label>
         </div>
-        <label class="radio-label" style="margin-top:6px">
-          <input type="checkbox" class="next-line-check">
-          Value is on the line below the label <span class="hint">(for column headers)</span>
-        </label>
-        <label class="radio-label last-token-row" style="margin-top:4px">
-          <input type="checkbox" class="last-token-check">
-          It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
-        </label>
-        <label class="radio-label" style="margin-top:6px">
-          Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
-        </label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-top:8px">
+          <label class="radio-label">
+            <input type="checkbox" class="next-line-check">
+            Value is on the line below the label <span class="hint">(for column headers)</span>
+          </label>
+          <label class="radio-label last-token-row">
+            <input type="checkbox" class="last-token-check">
+            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+          </label>
+          <label class="radio-label">
+            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+          </label>
+          <label class="radio-label">
+            Capture the <input type="number" class="token-pos-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> value after the label <span class="hint">(use 2+ when another value appears between the label and yours)</span>
+          </label>
+        </div>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button class="btn btn-sm test-btn">Test</button>
           <button class="btn btn-sm btn-outline pick-btn">Pick ↗</button>
@@ -142,17 +147,22 @@
             </select>
           </label>
         </div>
-        <label class="radio-label" style="margin-top:6px">
-          <input type="checkbox" class="next-line-check">
-          Value is on the line below the label <span class="hint">(for column headers)</span>
-        </label>
-        <label class="radio-label last-token-row" style="margin-top:4px">
-          <input type="checkbox" class="last-token-check">
-          It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
-        </label>
-        <label class="radio-label" style="margin-top:6px">
-          Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
-        </label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-top:8px">
+          <label class="radio-label">
+            <input type="checkbox" class="next-line-check">
+            Value is on the line below the label <span class="hint">(for column headers)</span>
+          </label>
+          <label class="radio-label last-token-row">
+            <input type="checkbox" class="last-token-check">
+            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+          </label>
+          <label class="radio-label">
+            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+          </label>
+          <label class="radio-label">
+            Capture the <input type="number" class="token-pos-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> value after the label <span class="hint">(use 2+ when another value appears between the label and yours)</span>
+          </label>
+        </div>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button class="btn btn-sm test-btn">Test</button>
           <button class="btn btn-sm btn-outline pick-btn">Pick ↗</button>
@@ -168,17 +178,22 @@
           <label>Text in the PDF just before the amount:
             <input type="text" class="label-input" placeholder="e.g.  BASE IMPONIBLE">
           </label>
-          <label class="radio-label" style="margin-top:6px">
-            <input type="checkbox" class="next-line-check">
-            Value is on the line below the label <span class="hint">(for column headers)</span>
-          </label>
-          <label class="radio-label last-token-row" style="margin-top:4px">
-            <input type="checkbox" class="last-token-check">
-            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
-          </label>
-          <label class="radio-label" style="margin-top:6px">
-            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
-          </label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-top:8px">
+            <label class="radio-label">
+              <input type="checkbox" class="next-line-check">
+              Value is on the line below the label <span class="hint">(for column headers)</span>
+            </label>
+            <label class="radio-label last-token-row">
+              <input type="checkbox" class="last-token-check">
+              It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+            </label>
+            <label class="radio-label">
+              Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+            </label>
+            <label class="radio-label">
+              Capture the <input type="number" class="token-pos-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> value after the label <span class="hint">(use 2+ when another value appears between the label and yours)</span>
+            </label>
+          </div>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button class="btn btn-sm test-btn">Test</button>
@@ -195,17 +210,22 @@
           <label>Text in the PDF just before the VAT amount:
             <input type="text" class="label-input" placeholder="e.g.  IMPORTE I.V.A.">
           </label>
-          <label class="radio-label" style="margin-top:6px">
-            <input type="checkbox" class="next-line-check">
-            Value is on the line below the label <span class="hint">(for column headers)</span>
-          </label>
-          <label class="radio-label last-token-row" style="margin-top:4px">
-            <input type="checkbox" class="last-token-check">
-            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
-          </label>
-          <label class="radio-label" style="margin-top:6px">
-            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
-          </label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-top:8px">
+            <label class="radio-label">
+              <input type="checkbox" class="next-line-check">
+              Value is on the line below the label <span class="hint">(for column headers)</span>
+            </label>
+            <label class="radio-label last-token-row">
+              <input type="checkbox" class="last-token-check">
+              It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+            </label>
+            <label class="radio-label">
+              Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+            </label>
+            <label class="radio-label">
+              Capture the <input type="number" class="token-pos-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> value after the label <span class="hint">(use 2+ when another value appears between the label and yours)</span>
+            </label>
+          </div>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button class="btn btn-sm test-btn">Test</button>
@@ -224,17 +244,22 @@
         <div class="simple-row">
           <button class="btn btn-sm test-btn">Test</button>
         </div>
-        <label class="radio-label" style="margin-top:6px">
-          <input type="checkbox" class="next-line-check">
-          Value is on the line below the label <span class="hint">(for column headers)</span>
-        </label>
-        <label class="radio-label last-token-row" style="margin-top:4px">
-          <input type="checkbox" class="last-token-check">
-          It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
-        </label>
-        <label class="radio-label" style="margin-top:6px">
-          Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
-        </label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-top:8px">
+          <label class="radio-label">
+            <input type="checkbox" class="next-line-check">
+            Value is on the line below the label <span class="hint">(for column headers)</span>
+          </label>
+          <label class="radio-label last-token-row">
+            <input type="checkbox" class="last-token-check">
+            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+          </label>
+          <label class="radio-label">
+            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+          </label>
+          <label class="radio-label">
+            Capture the <input type="number" class="token-pos-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> value after the label <span class="hint">(use 2+ when another value appears between the label and yours)</span>
+          </label>
+        </div>
       </div>
       <div class="test-result hidden"></div>
     </div>
@@ -250,17 +275,22 @@
           <label>Text in the PDF just before the retention amount:
             <input type="text" class="label-input" placeholder="e.g.  RETENCIÓN I.R.P.F.">
           </label>
-          <label class="radio-label" style="margin-top:6px">
-            <input type="checkbox" class="next-line-check">
-            Value is on the line below the label <span class="hint">(for column headers)</span>
-          </label>
-          <label class="radio-label last-token-row" style="margin-top:4px">
-            <input type="checkbox" class="last-token-check">
-            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
-          </label>
-          <label class="radio-label" style="margin-top:6px">
-            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
-          </label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-top:8px">
+            <label class="radio-label">
+              <input type="checkbox" class="next-line-check">
+              Value is on the line below the label <span class="hint">(for column headers)</span>
+            </label>
+            <label class="radio-label last-token-row">
+              <input type="checkbox" class="last-token-check">
+              It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+            </label>
+            <label class="radio-label">
+              Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+            </label>
+            <label class="radio-label">
+              Capture the <input type="number" class="token-pos-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> value after the label <span class="hint">(use 2+ when another value appears between the label and yours)</span>
+            </label>
+          </div>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button class="btn btn-sm test-btn">Test</button>
@@ -281,17 +311,22 @@
           <label>Text in the PDF just before the comment:
             <input type="text" class="label-input" placeholder="e.g.  CONCEPTO">
           </label>
-          <label class="radio-label" style="margin-top:6px">
-            <input type="checkbox" class="next-line-check">
-            Value is on the line below the label <span class="hint">(for column headers)</span>
-          </label>
-          <label class="radio-label last-token-row" style="margin-top:4px">
-            <input type="checkbox" class="last-token-check">
-            It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
-          </label>
-          <label class="radio-label" style="margin-top:6px">
-            Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
-          </label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-top:8px">
+            <label class="radio-label">
+              <input type="checkbox" class="next-line-check">
+              Value is on the line below the label <span class="hint">(for column headers)</span>
+            </label>
+            <label class="radio-label last-token-row">
+              <input type="checkbox" class="last-token-check">
+              It is the last value on that line <span class="hint">(when the label is the rightmost column header)</span>
+            </label>
+            <label class="radio-label">
+              Use the <input type="number" class="occurrence-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> occurrence in the PDF <span class="hint">(if the label appears more than once)</span>
+            </label>
+            <label class="radio-label">
+              Capture the <input type="number" class="token-pos-input" value="1" min="1" max="9" style="width:44px;text-align:center;padding:2px 4px"> value after the label <span class="hint">(use 2+ when another value appears between the label and yours)</span>
+            </label>
+          </div>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button class="btn btn-sm test-btn">Test</button>
