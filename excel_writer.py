@@ -15,6 +15,7 @@ from openpyxl.styles import PatternFill
 from processor import InvoiceData
 
 # ── Green column indices (1-based) ────────────────────────────────────────────
+COL_REF         = 1   # A  Ref
 COL_INVOICE_NUM = 2   # B  Invoice
 COL_DATE        = 3   # C  Date
 COL_VAT_INC     = 6   # F  € (VAT inc)
@@ -99,7 +100,10 @@ def _write_row(ws, row: int, inv: InvoiceData) -> None:
     if inv.retention is not None and inv.excl_vat is not None and inv.vat_amount is not None:
         vat_inc = round(inv.excl_vat + inv.vat_amount - inv.retention, 2)
 
+    ref = Path(inv.source_file).stem.split(' ')[0] if inv.source_file else None
+
     cells_values = [
+        (COL_REF,         ref),
         (COL_INVOICE_NUM, inv.invoice_number),
         (COL_DATE,        inv.date),
         (COL_VAT_INC,     vat_inc),
@@ -114,6 +118,31 @@ def _write_row(ws, row: int, inv: InvoiceData) -> None:
         cell = ws.cell(row=row, column=col, value=value)
         if col == COL_DATE and isinstance(value, datetime.date):
             cell.number_format = 'DD/MM/YYYY'
+
+
+def _sort_rows(ws) -> None:
+    """Sort all data rows by column A (Ref) ascending; None values go last."""
+    last_row = max(
+        (r for r in range(2, ws.max_row + 1)
+         if any(ws.cell(row=r, column=c).value is not None for c in range(1, LAST_COL + 1))),
+        default=1,
+    )
+    if last_row < 2:
+        return
+
+    all_rows = [
+        {c: (ws.cell(row=r, column=c).value, ws.cell(row=r, column=c).number_format)
+         for c in range(1, LAST_COL + 1)}
+        for r in range(2, last_row + 1)
+    ]
+
+    all_rows.sort(key=lambda row: (row[COL_REF][0] is None, str(row[COL_REF][0] or '').lower()))
+
+    for i, row_data in enumerate(all_rows):
+        for col, (value, fmt) in row_data.items():
+            cell = ws.cell(row=i + 2, column=col, value=value)
+            if fmt:
+                cell.number_format = fmt
 
 
 def append_rows(
@@ -153,5 +182,6 @@ def append_rows(
             seen.add(key)
         written += 1
 
+    _sort_rows(ws)
     wb.save(output_path)
     return {'written': written, 'duplicates': skipped_duplicates, 'errors': errors}
