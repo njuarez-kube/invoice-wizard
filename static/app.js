@@ -441,6 +441,7 @@ if (IS_SETUP) {
     const meta = label ? { _label: label, _fmt: fmt, _next_line: nextLine, _last_token: lastToken, _token_pos: tokenPos } : {};
 
     if (fname === 'excl_vat') {
+      if (!label) return { skip: true };
       return { ...meta, regex: buildRegex(label, 'amount', nextLine, lastToken, tokenPos), group: 1, occurrence };
     }
 

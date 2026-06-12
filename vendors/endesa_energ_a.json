@@ -1,0 +1,55 @@
+{
+  "name": "ENDESA ENERGÍA",
+  "detect_keywords": [
+    "CIFA81948077"
+  ],
+  "currency": "EUR",
+  "fields": {
+    "vendor_name": {
+      "static": "ENDESA ENERGÍA"
+    },
+    "invoice_number": {
+      "_label": "Nºfactura:",
+      "_fmt": "code",
+      "_next_line": false,
+      "_last_token": false,
+      "_token_pos": 1,
+      "regex": "Nºfactura:\\s*(\\S+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "date": {
+      "_label": "Fechaemisiónfactura:",
+      "_fmt": "date_num",
+      "_next_line": false,
+      "_last_token": false,
+      "_token_pos": 1,
+      "type": "spanish_dmy",
+      "regex": "Fechaemisiónfactura:\\s*(\\d{1,2})[/\\-](\\d{2})[/\\-](\\d{4})",
+      "occurrence": 1
+    },
+    "excl_vat": {
+      "skip": true
+    },
+    "vat_amount": {
+      "_label": "Impuestos",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "_token_pos": 1,
+      "regex": "Impuestos[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    },
+    "vat_inc": {
+      "_label": "Total",
+      "_fmt": "",
+      "_next_line": false,
+      "_last_token": false,
+      "_token_pos": 1,
+      "regex": "Total[^\\d\\n]+([\\d.,]+)",
+      "group": 1,
+      "occurrence": 1
+    }
+  }
+}

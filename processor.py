@@ -277,6 +277,15 @@ def extract_invoice(text: str, vendor_cfg: dict, source_file: str, page_range: s
     elif data.excl_vat and data.vat_amount and data.excl_vat > 0:
         data.vat_pct = round(data.vat_amount / data.excl_vat * 100, 1)
 
+    # derive missing amount field from the other two (only when retention is not active)
+    if data.retention is None:
+        if data.excl_vat is None and data.vat_inc is not None and data.vat_amount is not None:
+            data.excl_vat = round(data.vat_inc - data.vat_amount, 2)
+        elif data.vat_amount is None and data.vat_inc is not None and data.excl_vat is not None:
+            data.vat_amount = round(data.vat_inc - data.excl_vat, 2)
+        elif data.vat_inc is None and data.excl_vat is not None and data.vat_amount is not None:
+            data.vat_inc = round(data.excl_vat + data.vat_amount, 2)
+
     for fname, val in [('invoice_number', data.invoice_number), ('date', data.date)]:
         if val is None:
             data.warnings.append(f"Could not extract {fname}")
@@ -300,10 +309,13 @@ def extract_invoice(text: str, vendor_cfg: dict, source_file: str, page_range: s
 
 # ── Page grouping (multi-page invoice support) ────────────────────────────────
 def _has_invoice_header(text: str, vendors: list[dict]) -> bool:
-    """True if this page text contains an invoice number (any vendor pattern, or generic)."""
+    """True if this page text contains a vendor's keywords AND its invoice-number pattern."""
     if RE_INVOICE_NUM_GENERIC.search(text):
         return True
+    text_lower = text.lower()
     for v in vendors:
+        if not any(kw.lower() in text_lower for kw in v.get('detect_keywords', [])):
+            continue
         pattern_cfg = v.get('fields', {}).get('invoice_number', {})
         if 'regex' in pattern_cfg:
             try:
